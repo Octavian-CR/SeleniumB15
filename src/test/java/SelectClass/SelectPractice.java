@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import utils.BrowserUtils;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -15,38 +16,60 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SelectPractice {
-   // @Test
-//    public void validateFirstOptionAndPrintAllOptions() throws InterruptedException {
-//        WebDriverManager.chromedriver().setup();
-//        WebDriver driver = new ChromeDriver();
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-//        driver.manage().window().maximize();
-//        driver.navigate().to("file:///C:/Users/Cory/Desktop/Techtorialhtml.html");
-//
-//        WebElement CountryBox = driver.findElement(By.xpath("//select[@name='country']"));
-//        Select countries = new Select(CountryBox);
-//
-//        String actual=countries.getFirstSelectedOption().getText().trim();
-//        String expected="UNITED STATES";
-//        Assert.assertEquals(actual,expected);
-//        List<WebElement> allCountries = countries.getOptions();
-//        int count =0;
-//        for (int i = 0; i < allCountries.size(); i++) {
-//            System.out.println( i+1 +""+allCountries.get(i).getText());
-//
-//            count ++;
-//        }
-//        System.out.println(count);
-//
-//
-//
-//
-//        countries.selectByValue("134");
-//        Thread.sleep(3000);
-//        countries.selectByVisibleText("UKRAINE");
-//        Thread.sleep(3000);
-//        countries.selectByIndex(100);
-//    }
+    @Test
+    public void validateFirstOptionAndPrintAllOptions() throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.navigate().to("file:///C:/Users/Cory/Desktop/Techtorialhtml.html");
+
+        WebElement CountryBox = driver.findElement(By.xpath("//select[@name='country']"));
+        Select countries = new Select(CountryBox);
+
+        String actual=countries.getFirstSelectedOption().getText().trim();
+        String expected="UNITED STATES";
+        Assert.assertEquals(actual,expected);
+        List<WebElement> allCountries = countries.getOptions();
+        int count =0;
+        for (int i = 0; i < allCountries.size(); i++) {
+            System.out.println( i+1 +""+allCountries.get(i).getText());
+
+            count ++;
+        }
+        System.out.println(count);
+
+
+
+
+        countries.selectByValue("134");
+        Thread.sleep(3000);
+        countries.selectByVisibleText("UKRAINE");
+        Thread.sleep(3000);
+        countries.selectByIndex(100);
+    }
+
+    @Test
+    public void multiSelect() throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.navigate().to("file:///C:/Users/Cory/Desktop/Techtorialhtml.html");
+        WebElement countryBox = driver.findElement(By.cssSelector(".select"));
+        Select country = new Select(countryBox);
+        country.selectByVisibleText("One");
+        Thread.sleep(2000);
+        country.selectByValue("3");
+        Thread.sleep(2000);
+        country.selectByIndex(4);
+        Thread.sleep(2000);
+        country.deselectByVisibleText("One");
+        country.deselectAll();
+    }
+
+
+
 /*
 1-Navigate to the website
 2-Select one way trip button
@@ -130,5 +153,63 @@ NOTE2:You can use any select method value,visibleText
 
 
     }
+
+    @Test
+    public void shortCutSelectClass() throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.navigate().to("https://demo.guru99.com/test/newtours/reservation.php");
+
+        WebElement type = driver.findElement(By.xpath("//input[@value='oneway']"));
+        type.click();
+
+        WebElement passangers = driver.findElement(By.xpath("//select[@name='passCount']"));
+        BrowserUtils.selectBy(passangers,"3","index");
+
+        WebElement from = driver.findElement(By.xpath("//select[@name='fromPort']"));
+        BrowserUtils.selectBy(from,"San Francisco","value");
+
+        WebElement departureMonth = driver.findElement(By.xpath("//select[@name='fromMonth']"));
+        BrowserUtils.selectBy(departureMonth,"8","value");
+
+        WebElement departureDate = driver.findElement(By.xpath("//select[@name='fromDay']"));
+        BrowserUtils.selectBy(departureDate,"14","index");
+
+
+        WebElement to = driver.findElement(By.xpath("//select[@name='toPort']"));
+        BrowserUtils.selectBy(to,"London","value");
+
+        WebElement arrivalMonth = driver.findElement(By.xpath("//select[@name='toMonth']"));
+        BrowserUtils.selectBy(arrivalMonth,"12","value");
+
+        WebElement arrivalDate = driver.findElement(By.xpath("//select[@name='toDay']"));
+        Select arrivalD = new Select(arrivalDate);
+        arrivalD.selectByIndex(14);
+
+        WebElement servClas = driver.findElement(By.xpath("//input[@value='Business']"));
+        servClas.click();
+
+        WebElement airline = driver.findElement(By.xpath("//select[@name='airline']"));
+        Select airline1 = new Select(airline);
+        airline1.selectByVisibleText("Unified Airlines");
+
+        List<WebElement> allAirlines = airline1.getOptions();
+        List<String> expectedAirlines = Arrays.asList("No Preference","Blue Skies Airlines","Unified Airlines","Pangea Airlines");
+        for (int i = 0; i < allAirlines.size(); i++) {
+            Assert.assertEquals(allAirlines.get(i).getText().trim(),expectedAirlines.get(i));
+        }
+
+        WebElement continueButton = driver.findElement(By.xpath("//input[@type='image']"));
+        continueButton.click();
+
+        String expected = "After flight finder - No Seats Avaialble";
+        WebElement header = driver.findElement(By.xpath("//font[@size='4']"));
+        String actual = header.getText().trim();
+
+        Assert.assertEquals(expected,actual);
+    }
+
 
 }
