@@ -59,8 +59,13 @@ navigate to : http://secure.smartbearsoftware.com/samples/TestComplete11/WebOrde
         WebElement allProductsButton = driver.findElement(By.xpath("//a[@href='Products.aspx']"));
         allProductsButton.click();
 
+        WebElement isSelected = driver.findElement(By.xpath("//li[@class='selected']"));
+        Assert.assertEquals(isSelected.getText(),"View all products");
+
         String expectedHeader = "List of Products";
         WebElement Header = driver.findElement(By.tagName("h2"));
+
+
         String actualHeader = Header.getText().trim();
         Assert.assertEquals(expectedHeader,actualHeader);
         Assert.assertTrue(driver.getCurrentUrl().contains("Products"));
