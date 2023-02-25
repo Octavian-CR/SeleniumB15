@@ -45,37 +45,7 @@ public class HoverOver {
 
     }
 
-    @Test
-    public void food() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().window().maximize();
-        driver.get("https://demos.telerik.com/kendo-ui/fx/expand");
 
-        Thread.sleep(3000);
-        WebElement acceptCookies = driver.findElement(By.xpath("//button[@id='onetrust-accept-btn-handler']"));
-        Actions actions = new Actions(driver);
-        actions.click(acceptCookies);
-
-        Thread.sleep(2000);
-
-        List<WebElement> images = driver.findElements(By.xpath("//div[@class='product k-listview-item']//img"));
-        List<WebElement> dish = driver.findElements(By.xpath("//div[@class='product-description']//h3"));
-        List<WebElement> prices = driver.findElements(By.xpath("//div[@class='product-description']//p"));
-        actions.scrollByAmount(200,200);
-        Map<String, String> dish_price = new HashMap<>();
-
-        for (int i = 0; i < images.size() ; i++) {
-
-            actions.moveToElement(images.get(i)).perform();
-            dish_price.put(BrowserUtils.getText(dish.get(i)),BrowserUtils.getText(prices.get(i)));
-
-        }
-
-        System.out.println(dish_price);
-
-    }
 
 
 }
