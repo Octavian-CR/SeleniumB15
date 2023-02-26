@@ -66,6 +66,30 @@ public class PracticeActions {
         }
 
         System.out.println(dish_price);
-
     }
+
+    @Test
+    public void validateNotAcceptableFunctionality (){
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.get("https://demoqa.com/droppable");
+        WebElement accept = driver.findElement(By.xpath("//a[@id='droppableExample-tab-accept']"));
+        accept.click();
+        WebElement notAcceptable = driver.findElement(By.xpath("//div[@id='notAcceptable']"));
+        WebElement acceptable = driver.findElement(By.xpath("//div[@id='acceptable']"));
+        WebElement droppable = driver.findElement(By.xpath("//div[@id='acceptDropContainer']//div[@id='droppable']"));
+        Actions actions = new Actions(driver);
+        actions.clickAndHold(notAcceptable).moveToElement(droppable).release().perform();
+        String expectedMessage1 = BrowserUtils.getText(notAcceptable);
+        String actualMessage1 = "Not Acceptable";
+        Assert.assertEquals(expectedMessage1,actualMessage1);
+        actions.clickAndHold(acceptable).moveToElement(droppable).release().perform();
+        String expectedMessage = BrowserUtils.getText(droppable);
+        String actualMessage = "Dropped!";
+        Assert.assertEquals(expectedMessage,actualMessage);
+        driver.close();
+    }
+
 }
