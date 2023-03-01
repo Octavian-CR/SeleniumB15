@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
+import java.util.Set;
+
 public class BrowserUtils {
     public static void selectBy(WebElement location, String value, String methodName){
         Select select = new Select(location);
@@ -43,5 +45,26 @@ public class BrowserUtils {
     public static void scrollWithJS(WebDriver driver ,WebElement element){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true)",element);
+    }
+
+    public static void switchByID(WebDriver driver){
+        String mainPageID = driver.getWindowHandle();
+        Set<String> allPagesID = driver.getWindowHandles();
+        for (String id : allPagesID){
+            if (!id.equals(mainPageID)){
+                driver.switchTo().window(id);
+                break;
+            }
+        }
+    }
+
+    public static void switchByTitle(WebDriver driver, String title){
+        Set<String> allPagesID = driver.getWindowHandles();
+        for (String id : allPagesID){
+            driver.switchTo().window(id);
+            if (driver.getTitle().contains(title)){
+                break;
+            }
+        }
     }
 }

@@ -5,6 +5,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.BrowserUtils;
 
@@ -33,9 +35,34 @@ public class SwitchWindow {
         }
         WebElement header = driver.findElement(By.tagName("h3"));
         System.out.println(BrowserUtils.getText(header));
-//        driver.navigate().to(clickHere.getAttribute("href"));
-//        System.out.println(driver.getTitle());
+    }
 
+    @Test
+    public void practice1() throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.get("https://www.hyrtutorials.com/p/window-handles-practice.html");
+        WebElement newTab = driver.findElement(By.cssSelector("#newTabBtn"));
+        newTab.click();
+        String mainPageID = driver.getWindowHandle();
+        Set<String> pageIDs = driver.getWindowHandles();
+        for (String pageID : pageIDs){
+            if (!pageID.equals(mainPageID)){
+                driver.switchTo().window(pageID);
+                break;
+            }
+        }
+        Thread.sleep(2000);
+        String title = driver.getTitle().trim();
+        Assert.assertEquals(title,"AlertsDemo - H Y R Tutorials");
+        String actualHeader = BrowserUtils.getText(driver.findElement(By.xpath("//h1[@itemprop='name']")));
+        Assert.assertEquals(actualHeader,"AlertsDemo");
+        WebElement alertButton = driver.findElement(By.cssSelector("#alertBox"));
+        alertButton.click();
+        Thread.sleep(5000);
+        driver.quit();
 
 
     }
