@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import utils.BrowserUtils;
 
 import java.time.Duration;
@@ -25,14 +26,19 @@ public class AlertIntro {
         JS_Alert.click();
         Alert alert = driver.switchTo().alert();
         String actualJS_AlertText = alert.getText(); //to get the text from Alert Pop-UP
-        String expectedJS_alertText = "I am a JS Alert";
-        Assert.assertEquals(actualJS_AlertText,expectedJS_alertText);
+        String expectedJS_alertText = "I am a JS Alert_";
+//        Assert.assertEquals(actualJS_AlertText,expectedJS_alertText);
+        SoftAssert softAssert =new SoftAssert();
+        softAssert.assertEquals(actualJS_AlertText,expectedJS_alertText,"There is a comparison problem");
         Thread.sleep(3000);
         alert.accept(); //it clicks OK button
         WebElement message = driver.findElement(By.cssSelector("#result"));
         String actualMessage = BrowserUtils.getText(message); // this is webelement, so I can use browser utils
         String expectedMessage = "You successfully clicked an alert";
         Assert.assertEquals(actualMessage,expectedMessage);
+        driver.quit();
+        softAssert.assertAll();
+
 
     }
 
@@ -50,9 +56,14 @@ public class AlertIntro {
         Alert alert = driver.switchTo().alert();
         alert.dismiss();
         WebElement message = driver.findElement(By.cssSelector("#result"));
-        String actualMessage = BrowserUtils.getText(message); // this is webelement, so I can use browser utils
-        String expectedMessage = "You clicked: Cancel";
-        Assert.assertEquals(actualMessage,expectedMessage);
+        String actualMessage = BrowserUtils.getText(message); // this is webElement, so I can use browser utils
+        String expectedMessage = "You clicked: Cancel_";
+//        Assert.assertEquals(actualMessage,expectedMessage);
+        SoftAssert softAssert =new SoftAssert();
+        softAssert.assertEquals(actualMessage,expectedMessage,"There is a comparison problem");
+        softAssert.assertAll();
+        driver.quit();
+
     }
 
     @Test
@@ -72,6 +83,9 @@ public class AlertIntro {
         String actualMessage = BrowserUtils.getText(message); // this is webElement, so I can use browser utils
         String expectedMessage = "You entered: I love UI automation";
         Assert.assertEquals(actualMessage,expectedMessage);
+        driver.quit();
+
+
     }
 
 }

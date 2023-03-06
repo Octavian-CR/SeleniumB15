@@ -1,12 +1,10 @@
 package Homework.homework3;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.BrowserUtils;
@@ -15,6 +13,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Homework3 {
 
@@ -59,6 +58,7 @@ public class Homework3 {
         for (int i = 0; i < lastNames.size(); i++) {
             Assert.assertTrue(BrowserUtils.getText(lastNames.get(i)).contains("Crestian"));
         }
+        driver.close();
     }
 
     @Test
@@ -90,7 +90,7 @@ public class Homework3 {
         for (int i = 0; i < firstNames.size(); i++) {
             Assert.assertTrue(BrowserUtils.getText(firstNames.get(i)).contains("EditedFirstName"));
         }
-        driver.quit();
+        driver.close();
 
     }
 
@@ -120,4 +120,109 @@ public class Homework3 {
         Thread.sleep(3000);
         driver.close();
     }
+
+    @Test
+    public void Test4(){
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.navigate().to("http://uitestpractice.com/");
+
+        WebElement draggable = driver.findElement(By.cssSelector("#draggable"));
+        WebElement droppable = driver.findElement(By.cssSelector("#droppable"));
+        Actions actions = new Actions(driver);
+        actions.dragAndDrop(draggable,droppable).perform();
+        Assert.assertEquals(BrowserUtils.getText(droppable),"Dropped!");
+        driver.close();
+    }
+
+    @Test
+    public void Test5 (){
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.navigate().to("http://uitestpractice.com/");
+        WebElement dblClickBtn = driver.findElement(By.name("dblClick"));
+        Actions actions = new Actions(driver);
+        actions.doubleClick(dblClickBtn).perform();
+        Alert alert = driver.switchTo().alert();
+        Assert.assertEquals(alert.getText(),"Double Clicked !!");
+        alert.accept();
+        driver.close();
+    }
+
+    @Test
+    public void Test6 () throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.navigate().to("http://uitestpractice.com/");
+        driver.switchTo().frame("iframe_a");
+        WebElement enterName = driver.findElement(By.xpath("//input[@id='name']"));
+        enterName.sendKeys("Octavian");
+        Actions actions = new Actions(driver);
+        driver.switchTo().parentFrame();
+        WebElement uitestpracticeLink = driver.findElement(By.xpath("//a[.='uitestpractice.com']"));
+        actions.scrollToElement(uitestpracticeLink).perform();
+        uitestpracticeLink.click();
+        Thread.sleep(3000);
+        driver.switchTo().frame("iframe_a");
+        WebElement errorMessage = driver.findElement(By.xpath("//div[@id='sub-frame-error-details']"));
+        Thread.sleep(5000);
+        actions.moveToElement(errorMessage).perform();
+
+        Assert.assertEquals(BrowserUtils.getText(errorMessage),"www.uitestpractice.com refused to connect.");
+        driver.quit();
+    }
+
+    @Test
+    public void Test7 (){
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.navigate().to("http://uitestpractice.com/");
+        WebElement openLinkInNewVideo = driver.findElement(By.xpath("//a[.='Click here to watch videos on C#']"));
+        String PageID = driver.getWindowHandle();
+        openLinkInNewVideo.click();
+        Set<String> pagesId = driver.getWindowHandles();
+        for (String id : pagesId){
+            if (!id.equals(PageID)){
+                driver.switchTo().window(id);
+            break;
+            }
+        }
+
+        Assert.assertTrue(driver.getCurrentUrl().contains("youtube"));
+        driver.quit();
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
