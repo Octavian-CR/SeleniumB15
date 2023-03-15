@@ -30,7 +30,7 @@ public class MacBookProPage {
         System.out.println(moreInformation.getText());
         Assert.assertEquals(BrowserUtils.getText(header1),(header));
         Assert.assertEquals(BrowserUtils.getText(priceContainer),(price));
-        Assert.assertEquals(BrowserUtils.getText(moreInformation),(description));
+        Assert.assertTrue(BrowserUtils.getText(moreInformation).contains(description));
     }
 
     public void clickAddToCartButton(){

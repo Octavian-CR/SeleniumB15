@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -26,18 +27,19 @@ public class MacBookProTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www.demoblaze.com/#");
     }
-
+    @Parameters({"laptopBrand","laptopPrice","description"})
     @Test
-    public void validateMacBookProductInfo() throws InterruptedException {
+    public void validateMacBookProductInfo(String laptopBrand,String laptopPrice, String description) throws InterruptedException {
 
         MainPage mainPage = new MainPage(driver);
         mainPage.clickLaptopButton();
         LaptopPage laptopPage = new LaptopPage(driver);
-        laptopPage.chooseMacBook("MacBook Pro",driver);
+        laptopPage.chooseMacBook(laptopBrand,driver); //MacBook Pro
         MacBookProPage macBookProPage = new MacBookProPage(driver);
-        macBookProPage.validateProductInfo("MacBook Pro","$1100 *includes tax","Product description\n" +
-                "Apple has introduced three new versions of its MacBook Pro line, including a 13-inch and 15-inch model with the Touch Bar, a thin, multi-touch strip display that sits above the MacBook Pro's keyboard.");
+        macBookProPage.validateProductInfo("MacBook Pro",laptopPrice,description);
 
+        //$1100 *includes tax
+        //Apple has introduced three new versions of its MacBook Pro line
     }
 
     @AfterMethod

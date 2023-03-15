@@ -2,6 +2,7 @@ package com.test.blaze.tests;
 
 import com.test.blaze.pages.*;
 import org.testng.annotations.Test;
+import utils.ConfigReader;
 
 public class OrderTest extends TestBaseBlaze {
 
@@ -20,7 +21,7 @@ public class OrderTest extends TestBaseBlaze {
         cartPage.validateProductInformation("MacBook Pro","1100");
         OrderPage orderPage = new OrderPage(driver);
         orderPage.clickPlaceOrderButton();
-        orderPage.validateProductIsPlaced(driver,"Octavian","Moldova","Edinet","111222333","06","2024","https://www.demoblaze.com/index.html");
+        orderPage.validateProductIsPlaced(driver,"Octavian","Moldova",ConfigReader.readProperty("city"), ConfigReader.readProperty("creditCard"),"06","2024","https://www.demoblaze.com/index.html");
     }
 
 }
